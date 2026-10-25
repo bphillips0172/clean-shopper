@@ -15,7 +15,7 @@ It is the course demo project for Claude Code for Designers. Students build it o
 
 ## Target User
 
-Someone who wants to make more informed purchasing decisions for their home and family -- replacing toxic cleaning products, finding personal care items without harmful chemicals, or stocking a pantry with cleaner food options -- but finds the research overwhelming and time-consuming.
+Someone who wants to make more informed purchasing decisions for their home and family, this should be a person with children and pets -- replacing toxic cleaning products, finding personal care items without harmful chemicals, or stocking a pantry with cleaner food options -- but finds the research overwhelming and time-consuming.
 
 Key frustrations the product addresses:
 
