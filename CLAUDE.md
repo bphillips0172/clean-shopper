@@ -30,3 +30,7 @@ Before any UI work, read docs/design-notes.md. It holds design decisions I have 
   - **Made:** what you built or changed
   - **Saved:** file paths
   - **Open questions:** anything you were unsure about
+
+## References
+
+@docs/project-context.md
