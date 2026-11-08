@@ -34,30 +34,44 @@ const sampleProducts = [
   },
 ]
 
+const categories = ['All', 'Home', 'Personal care', 'Pantry']
+
 function App() {
   const [savedIds, setSavedIds] = useState(['shampoo'])
+  const [activeCategory, setActiveCategory] = useState('All')
 
   const toggleSaved = (id) =>
     setSavedIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]))
+
+  const shownProducts =
+    activeCategory === 'All'
+      ? sampleProducts
+      : sampleProducts.filter((product) => product.category.startsWith(activeCategory))
 
   return (
     <main className="mx-auto max-w-[var(--container-max)] px-container-phone py-section-phone sm:px-container-tablet sm:py-section-tablet lg:px-container-desktop lg:py-section-desktop">
       <h1 className="font-display text-xl font-[360] leading-[1.14] tracking-[0.32px] text-fg">
         Component preview
       </h1>
-      <h2 className="mt-3 text-lg text-muted">Categories</h2>
-      <ul className="mt-4 flex flex-wrap gap-2">
-        {['Home', 'Personal care', 'Pantry'].map((label) => (
-          <li key={label}>
-            <CategoryTag label={label} />
-          </li>
-        ))}
-      </ul>
+      <h2 className="mt-3 text-lg text-muted">Recommended for you</h2>
 
-      <h2 className="mt-8 text-lg text-muted">Recommended for you</h2>
+      <div role="group" aria-label="Filter by category" className="mt-5 flex flex-wrap gap-2">
+        {categories.map((label) => (
+          <CategoryTag
+            key={label}
+            label={label}
+            isActive={label === activeCategory}
+            onClick={() => setActiveCategory(label)}
+          />
+        ))}
+      </div>
+
+      {shownProducts.length === 0 && (
+        <p className="mt-8 text-base text-muted">No {activeCategory.toLowerCase()} products yet.</p>
+      )}
 
       <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {sampleProducts.map(({ id, ...product }) => (
+        {shownProducts.map(({ id, ...product }) => (
           <li key={id}>
             <ProductCard {...product} saved={savedIds.includes(id)} onSave={() => toggleSaved(id)} />
           </li>

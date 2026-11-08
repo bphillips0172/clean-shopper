@@ -91,26 +91,41 @@ The base panel that other components build on.
 
 ## CategoryTag
 
-> **Approved 2026-11-08.** The reference file has no tags, so this section builds one from the chip and type rules above.
+> **Proposed 2026-11-08.** Replaces the approved read-only label: CategoryTag is now a filter. The reference file has no tags, so this section builds one from the chip, button and type rules above.
 
-A small read-only label naming a product's category, such as "Home", "Personal care" or "Pantry". It is a shared component (`src/components/CategoryTag.jsx`). It is not clickable and takes no keyboard focus.
+A pill people tap to filter products by category, such as "All", "Home", "Personal care" or "Pantry". It is a shared component (`src/components/CategoryTag.jsx`).
+
+CategoryTag does not track which category is selected. The parent page holds that, passes `isActive` to each tag, and updates it when a tag's `onClick` fires.
 
 ### Look
 
-- Shape: `inline-flex items-center rounded-pill px-3 py-1`.
-- Fill: `bg-surface-warm`, no border. This tells it apart from the outlined certification chips on ProductCard.
-- Text: `font-body text-sm font-medium text-fg`, single line (`whitespace-nowrap`).
+- Shape: `inline-flex items-center rounded-pill px-3 py-1`, no border.
+- Text: `font-body text-sm font-medium`, single line (`whitespace-nowrap`).
+- Motion: `transition-colors duration-fast ease-standard`.
+
+| State | Classes |
+|---|---|
+| Active | `bg-fg text-bg` (white pill, black text, the same pairing as the primary button) |
+| Inactive | `bg-surface-warm text-muted` |
+| Inactive, hover | `text-fg` |
+| Keyboard focus | `focus-visible:outline-none focus-visible:shadow-focus-ring` |
+
+The accent green is not used for the active state: it is reserved for focus rings.
 
 ### Props
 
 | Prop | Type | Required |
 |---|---|---|
 | `label` | string | yes |
+| `isActive` | boolean | no (default false) |
+| `onClick` | function | no |
 
 ### Accessibility
 
-- Rendered as a `span`, so screen readers read it as plain text.
-- `text-fg` on `bg-surface-warm` is well above WCAG AA.
+- Rendered as a `button` with `aria-pressed` set from `isActive`, so screen readers announce "selected" or "not selected".
+- Reachable with Tab and pressed with Enter or Space.
+- The parent wraps the tags in a group with a label, such as `role="group" aria-label="Filter by category"`.
+- `text-muted` on `bg-surface-warm` and `text-bg` on `bg-fg` are both above WCAG AA.
 
 ---
 
