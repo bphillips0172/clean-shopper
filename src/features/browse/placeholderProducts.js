@@ -11,6 +11,7 @@ export const placeholderProducts = [
     cleanScore: 92,
     certifications: ['EWG Verified', 'Fragrance Free'],
     reason: 'No fragrance, dyes or parabens. Gentle enough for sensitive skin.',
+    price: 13.99,
   },
   {
     id: 'deodorant',
@@ -22,6 +23,7 @@ export const placeholderProducts = [
     certifications: ['Leaping Bunny'],
     reason: 'Aluminum-free, but scented with fragrance.',
     avoidedIngredient: 'fragrance',
+    price: 14.99,
   },
   {
     id: 'all-purpose',
@@ -32,17 +34,19 @@ export const placeholderProducts = [
     cleanScore: 94,
     certifications: ['EWG Verified', 'B Corp', 'Leaping Bunny', 'Cruelty Free'],
     reason: 'Plant-based with no ingredients on your avoid list. Safe around kids and pets.',
+    price: 24.99,
   },
   {
     id: 'dish-soap',
     name: 'Lavender Dish Soap',
-    brand: 'Mrs. Meyer’s',
+    brand: "Mrs. Meyer's",
     category: 'Home cleaning',
     subcategory: 'Kitchen',
     cleanScore: 61,
     certifications: ['Leaping Bunny'],
     reason: 'Cuts grease well, but scores lower on ingredient safety.',
     avoidedIngredient: 'fragrance',
+    price: 5.49,
   },
   {
     id: 'baby-wash',
@@ -53,6 +57,7 @@ export const placeholderProducts = [
     cleanScore: 88,
     certifications: ['EWG Verified', 'USDA Organic'],
     reason: 'Tear-free formula from a brand you trust.',
+    price: 11.99,
   },
   {
     id: 'diaper-cream',
@@ -63,5 +68,6 @@ export const placeholderProducts = [
     cleanScore: 90,
     certifications: ['EWG Verified', 'Non-GMO'],
     reason: 'Zinc oxide base with no petroleum or synthetic fragrance.',
+    price: 16.49,
   },
 ]

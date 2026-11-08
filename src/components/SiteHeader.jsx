@@ -6,7 +6,7 @@ const navLink = ({ isActive }) =>
     isActive ? 'font-medium text-fg' : 'text-muted hover:text-fg'
   }`
 
-function SiteHeader() {
+function SiteHeader({ savedCount = 0 }) {
   return (
     <header className="border-b border-border">
       <div className="mx-auto flex max-w-[var(--container-max)] flex-wrap items-center justify-between gap-x-6 gap-y-3 px-container-phone py-4 sm:px-container-tablet lg:px-container-desktop">
@@ -35,6 +35,11 @@ function SiteHeader() {
               <li>
                 <NavLink to="/browse" className={navLink}>
                   Browse
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/saved" className={navLink}>
+                  Cart{savedCount > 0 && <span className="ml-1.5 inline-flex size-5 items-center justify-center rounded-pill bg-fg text-xs text-bg">{savedCount}</span>}
                 </NavLink>
               </li>
             </ul>
