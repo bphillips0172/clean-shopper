@@ -137,6 +137,29 @@ The accent green is not used for the active state: it is reserved for focus ring
 
 ---
 
+## SiteHeader
+
+> **Proposed 2026-11-08.** Built from the type, color and ThemeToggle rules above.
+
+The bar at the top of every page: the Clean Shopper name, links to each page, and the ThemeToggle. It is a shared component (`src/components/SiteHeader.jsx`), rendered once in `App.jsx` above the pages.
+
+### Structure
+
+A full-width `header` with a bottom border (`border-b border-border`). Inside, a row on the page's content width (same container and gutters as the pages, `py-4`):
+
+1. **Wordmark:** a 24px leaf mark (`size-5`) and "Clean Shopper" in `font-display text-lg text-fg`. Links to the landing page.
+2. **Navigation** (`nav` labelled "Main"): "Home" and "Browse", `text-sm`, `gap-5`. The current page is `font-medium text-fg` and marked `aria-current="page"`; the others are `text-muted`, hover `text-fg`.
+3. **ThemeToggle**, after the links.
+
+On narrow screens the row wraps: the wordmark sits on the first line and the links with the toggle move to a second line, rather than shrinking.
+
+### Accessibility
+
+- Every link and the toggle are reachable with Tab and show the focus ring.
+- The current page is announced by screen readers through `aria-current`.
+
+---
+
 ## ThemeToggle
 
 > **Approved 2026-11-08.** Built from the CategoryTag pill and Button rules above.
@@ -162,7 +185,7 @@ A switch that turns dark mode on or off for the whole app. It is a shared compon
 
 ### Placement
 
-Top right of the page, on the same row as the page heading.
+In the SiteHeader, at the right end, after the navigation links.
 
 ---
 
