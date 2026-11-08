@@ -22,3 +22,9 @@ dist-ssr
 *.sln
 *.sw?
 .playwright-mcp/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/walkthrough-screenshots/

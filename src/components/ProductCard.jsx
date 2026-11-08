@@ -17,6 +17,7 @@ function ProductCard({
   reason,
   avoidedIngredient,
   imageUrl,
+  price,
   saved = false,
   onSave,
   onCompare,
@@ -54,7 +55,12 @@ function ProductCard({
         <h3 className="line-clamp-2 font-display text-lg font-normal leading-tight text-fg">
           {name}
         </h3>
-        <p className="text-sm text-muted">{brand}</p>
+        <div className="flex items-baseline gap-3">
+          <p className="text-sm text-muted">{brand}</p>
+          {price != null && (
+            <p className="font-display text-base font-normal text-fg">${price.toFixed(2)}</p>
+          )}
+        </div>
       </div>
 
       {cleanScore == null ? (
@@ -112,7 +118,7 @@ function ProductCard({
           onClick={onSave}
           className={`${buttonBase} border-transparent bg-fg text-bg hover:opacity-90`}
         >
-          {saved ? 'Saved' : 'Save to list'}
+          {saved ? 'In cart' : 'Add to cart'}
         </button>
         <button
           type="button"

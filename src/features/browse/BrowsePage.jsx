@@ -15,17 +15,13 @@ const ghostButton =
 // status: idle (browsing), searching, done or error
 const NO_SEARCH = { status: 'idle', query: '', results: [] }
 
-function BrowsePage() {
+function BrowsePage({ savedIds = [], toggleSaved = () => {} }) {
   // Another page can open Browse already filtered, e.g. from a category tag on the landing page.
   const { state } = useLocation()
   const [selectedCategory, setSelectedCategory] = useState(state?.category ?? ALL)
-  const [savedIds, setSavedIds] = useState([])
   const [searchText, setSearchText] = useState('')
   const [search, setSearch] = useState(NO_SEARCH)
   const latestSearch = useRef(0)
-
-  const toggleSaved = (id) =>
-    setSavedIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]))
 
   const runSearch = async () => {
     const query = searchText.trim()
@@ -65,7 +61,7 @@ function BrowsePage() {
           <ProductCard
             {...product}
             saved={savedIds.includes(id)}
-            onSave={() => toggleSaved(id)}
+            onSave={() => toggleSaved({ id, ...product })}
             categoryActive={!isSearchMode && product.category === selectedCategory}
             onCategoryClick={() => showCategory(product.category)}
           />

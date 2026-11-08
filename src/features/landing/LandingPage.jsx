@@ -85,25 +85,36 @@ function LandingPage() {
     <main>
       {/* Hero */}
       <section className={`${container} ${sectionY}`}>
-        <p className="flex items-center gap-2 text-sm font-medium text-muted">
-          <span className="size-2 rounded-pill bg-success" aria-hidden="true" />
-          AI-powered ingredient research
-        </p>
-        <h1 className="mt-5 max-w-[16ch] font-display text-2xl font-light leading-tight text-fg sm:text-3xl lg:text-4xl">
-          Find products that are actually clean.
-        </h1>
-        <p className="mt-6 max-w-[46ch] text-lg leading-body text-muted">
-          When you have kids and pets, what goes on floors, in laundry, and on skin actually matters. Clean Shopper researches
-          ingredients so you don’t have to — filtered by your own preferences and verified against EWG’s Skin Deep database.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-4">
-          <Link to="/browse" className={primaryButton}>
-            Start researching
-            <ArrowIcon />
-          </Link>
-          <a href="#how-it-works" className={ghostButton}>
-            See how it works
-          </a>
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <p className="flex items-center gap-2 text-sm font-medium text-muted">
+              <span className="size-2 rounded-pill bg-success" aria-hidden="true" />
+              AI-powered ingredient research
+            </p>
+            <h1 className="mt-5 max-w-[16ch] font-display text-2xl font-light leading-tight text-fg sm:text-3xl lg:text-4xl">
+              Find products that are actually clean.
+            </h1>
+            <p className="mt-6 max-w-[46ch] text-lg leading-body text-muted">
+              When you have kids and pets, what goes on floors, in laundry, and on skin actually matters. Clean Shopper researches
+              ingredients so you don’t have to — filtered by your own preferences and verified against EWG’s Skin Deep database.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link to="/browse" className={primaryButton}>
+                Start researching
+                <ArrowIcon />
+              </Link>
+              <a href="#how-it-works" className={ghostButton}>
+                See how it works
+              </a>
+            </div>
+          </div>
+          <div className="hidden lg:block">
+            <img
+              src="/hero-products.webp"
+              alt="A collection of clean skincare products — serum, cleanser, face cream, facial oil and hand cream — arranged on stone with olive branches and aloe"
+              className="w-full rounded-xl object-cover shadow-raised"
+            />
+          </div>
         </div>
       </section>
 
@@ -194,6 +205,7 @@ function LandingPage() {
           cleanScore={92}
           certifications={['EWG Verified', 'Made Safe', 'Fragrance Free']}
           reason="Plant-based concentrate with no ingredients on your avoid list. Safe around kids and pets."
+          price={24.99}
           saved={exampleSaved}
           onSave={() => setExampleSaved((saved) => !saved)}
           onCategoryClick={() => navigate('/browse', { state: { category: 'Home cleaning' } })}
