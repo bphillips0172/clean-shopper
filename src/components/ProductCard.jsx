@@ -1,3 +1,5 @@
+import CategoryTag from './CategoryTag.jsx'
+
 const MAX_CERTIFICATIONS = 3
 
 const buttonBase =
@@ -7,6 +9,9 @@ function ProductCard({
   name,
   brand,
   category,
+  subcategory,
+  categoryActive = false,
+  onCategoryClick,
   cleanScore,
   certifications = [],
   reason,
@@ -42,7 +47,10 @@ function ProductCard({
       </div>
 
       <div className="flex flex-col gap-1">
-        <p className="text-sm text-muted">{category}</p>
+        <div className="mb-1 flex items-center gap-2">
+          <CategoryTag label={category} isActive={categoryActive} onClick={onCategoryClick} />
+          {subcategory && <span className="text-sm text-muted">{subcategory}</span>}
+        </div>
         <h3 className="line-clamp-2 font-display text-lg font-normal leading-tight text-fg">
           {name}
         </h3>

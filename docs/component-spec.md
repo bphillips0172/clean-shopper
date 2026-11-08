@@ -138,7 +138,7 @@ Shows one recommended product, why it fits the user's preferences, and the actio
 ### Content (top to bottom)
 
 1. **Image well:** 4:3 frame, `bg-surface-warm rounded-md`, image covers the frame. Without an image it shows a centered 36px outline icon (`size-8`) in `text-muted`. The image's alt text is the product name.
-2. **Category:** `text-sm text-muted`, for example "Home · Cleaning".
+2. **Category:** a CategoryTag with the top-level category (Home, Personal care or Pantry), then the subcategory as `text-sm text-muted`, for example [Home] Cleaning. Row: `flex items-center gap-2 mb-1`. Tapping the tag sets the page's category filter, the same as tapping it in the filter row. The tag shows as active while the page is filtered to its category.
 3. **Name:** an `h3` element styled as card title: `font-display text-lg text-fg`, weight 400, `leading-tight` (1.00). Clamps to 2 lines.
 4. **Brand:** `text-sm text-muted`.
 5. **Clean score:** a row with an 8px `bg-success` dot and the text "Clean score 92/100" in `text-sm text-fg`. The number always appears in text, so the dot is never the only signal.
@@ -151,7 +151,7 @@ Shows one recommended product, why it fits the user's preferences, and the actio
 
 ### Container
 
-Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus `flex flex-col gap-4 h-full`. The card itself is not clickable; only its buttons are.
+Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus `flex flex-col gap-4 h-full`. The card itself is not clickable; only its category tag and buttons are.
 
 ### Props
 
@@ -159,7 +159,10 @@ Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus
 |---|---|---|
 | `name` | string | yes |
 | `brand` | string | yes |
-| `category` | string | yes |
+| `category` | string: Home, Personal care or Pantry | yes |
+| `subcategory` | string | no |
+| `categoryActive` | boolean | no |
+| `onCategoryClick` | function | no |
 | `cleanScore` | number 0–100 | yes |
 | `certifications` | string[] | no |
 | `reason` | string | no |
@@ -171,7 +174,7 @@ Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus
 ### Accessibility
 
 - Rendered as an `article` so screen readers announce each product as its own item.
-- Buttons are real `button` elements reachable with Tab, with the green focus ring.
+- Buttons, including the category tag, are real `button` elements reachable with Tab, with the green focus ring.
 - All text meets WCAG AA on `bg-surface`.
 
 ### Out of scope
