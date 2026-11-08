@@ -110,7 +110,7 @@ function LandingPage() {
           </div>
           <div className="hidden lg:block">
             <img
-              src="/hero-products.webp"
+              src={`${import.meta.env.BASE_URL}hero-products.webp`}
               alt="A collection of clean skincare products — serum, cleanser, face cream, facial oil and hand cream — arranged on stone with olive branches and aloe"
               className="w-full rounded-xl object-cover shadow-raised"
             />
