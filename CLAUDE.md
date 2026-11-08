@@ -12,13 +12,24 @@ Clean Shopper helps people find clean, non-toxic home, personal care, and pantry
 
 ## Design context
 
-Before any UI work, read docs/design-notes.md. It holds design decisions I have already made, so follow them unless I say otherwise.
+Before any UI work, read these files. They hold decisions already made — follow them unless I say otherwise:
+
+- **docs/design-notes.md** — design direction for Clean Shopper
+- **docs/design-system.md** — Polaris design system: token values, rules, Do's and Don'ts, and the "Ask me first" guidelines
+- **docs/design-decisions.md** — log of decisions made in the token rename and rules review
 
 ## Where things go
 
 - The real app is a React project in src/. Build app features there.
 - Quick concepts go in prototypes/ as single HTML files that open with a double click. Keep them out of src/ so experiments never affect the app.
 - Design context lives in docs/.
+
+## Conventions
+
+**File structure:**
+- Shared components (used across multiple features) live in `src/components/`.
+- Feature-specific files live in `src/features/[feature-name]/`.
+- Do not place feature-specific files in `src/components/`, and do not duplicate shared components inside feature folders.
 
 ## How to work here
 
@@ -34,3 +45,5 @@ Before any UI work, read docs/design-notes.md. It holds design decisions I have 
 ## References
 
 @docs/project-context.md
+
+Use /prompt-optimizer to evaluate and refine instructions before sending them.
