@@ -40,6 +40,21 @@ test('a shopper browses, searches, fills a cart and checks out', async ({ page }
   await firstCard.scrollIntoViewIfNeeded()
   await shot('added-baby-product', `${firstName}; header reads "${await cartLink.textContent()}"`)
 
+  // 4b. Compare the two baby products
+  await page.getByRole('button', { name: 'Compare', exact: true }).first().click()
+  await page.getByRole('button', { name: 'Compare', exact: true }).first().click()
+  await page.getByRole('region', { name: 'Products to compare' }).scrollIntoViewIfNeeded()
+  await shot('compare-tray', await page.getByRole('region', { name: 'Products to compare' }).innerText())
+
+  await page.getByRole('link', { name: 'Compare now' }).click()
+  await expect(page).toHaveURL('/compare')
+  await shot('compare-page', await page.getByRole('heading', { level: 2 }).first().textContent())
+  await page.getByRole('table').scrollIntoViewIfNeeded()
+  await shot('compare-table', `${await page.getByRole('columnheader').count()} columns`)
+
+  await page.getByRole('link', { name: 'Browse', exact: true }).last().click()
+  await expect(page).toHaveURL('/browse')
+
   // 5. Search the live database
   await page.getByLabel('Search products').fill('sunscreen')
   await page.getByLabel('Search products').press('Enter')

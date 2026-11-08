@@ -317,6 +317,34 @@ The totals panel on the cart and email pages (`src/components/CartSummary.jsx`):
 
 ---
 
+## CompareTray
+
+> **Proposed 2026-11-08.**
+
+A panel that sticks to the bottom of the screen on the Browse page while at least one product is picked for comparing (`src/components/CompareTray.jsx`). It keeps the comparison in view while the shopper keeps browsing or searching.
+
+- Container: `sticky bottom-4` as the last thing on the page, so it floats over the grid while scrolling and settles below the last cards at the end instead of covering them. Card look: `rounded-md border border-border bg-surface p-4 shadow-raised`, `mt-8`.
+- Left: "Compare" with a count ("2 of 3"), then each picked product as a small pill (`rounded-pill bg-surface-warm px-3 py-1 text-sm text-fg`) with an × button labelled "Remove {name} from comparison". The pills scroll sideways on phones.
+- Right: "Compare now" (small primary, links to `/compare`) and "Clear" (text button). With only one product picked, "Compare now" is disabled and the count reads "Pick 1 more".
+- Announces changes politely to screen readers.
+
+---
+
+## Compare page
+
+> **Proposed 2026-11-08.**
+
+`/compare`, "Compare products": two or three products side by side, with a clear pick.
+
+- **Recommendation** at the top, in a Card: "Our pick: {name}" and one sentence on why. The pick skips products with an ingredient the shopper avoids (fragrance, until saved preferences exist), then takes the highest clean score, then the most certifications. If every product has an avoided ingredient, it picks the highest score and says so.
+- **Table:** one column per product, headed by the product name and brand, with the pick marked "Our pick". Rows, each with its label above the values so three columns fit a phone: Price, Clean score, Avoided ingredients ("None" or "Contains fragrance" in `text-warn`), Certifications, Category, Why it fits. A `table` with a caption; each row group is labelled for screen readers.
+- **Under each column:** Add to cart / In cart (ProductCard's button states) and "Remove" (text button).
+- **Empty or one product:** EmptyState "Pick at least two products to compare" with "Browse products".
+
+Comparing isn't saved: it resets when the page reloads, like the cart.
+
+---
+
 ## ProductCard
 
 > **Approved 2026-11-08.** The reference file has no product card, so this section builds one from the Card, Button and type rules above plus the brief.
@@ -335,7 +363,7 @@ Shows one recommended product, why it fits the user's preferences, and the actio
 8. **Preference warning (optional):** shown only when the product contains an ingredient the user avoids. `text-sm text-warn` with a 16px warning icon, for example "Contains fragrance, which you avoid". The text always names the ingredient.
 9. **Actions:** a wrapping row (`gap-3`, `mt-auto` so actions align across cards in a grid), using the small button size:
    - "Add to cart": small primary pill (`bg-fg text-bg`). Once added it changes to an outlined pill (`border-fg bg-transparent text-fg`, hover `bg-surface-warm`) with a 16px check icon reading "In cart", and sets `aria-pressed="true"`. Pressing it again removes the product. The two states differ in fill, icon and label, not just wording.
-   - "Compare": small ghost pill, shown only when the page passes `onCompare`. No page supports comparing yet, so it doesn't appear.
+   - "Compare": small ghost pill, shown only when the page passes `onCompare` (Browse does). Once picked it reads "Comparing" with a check icon on a `bg-surface-warm` fill and sets `aria-pressed="true"`; pressing again takes it back out. When three products are already picked, the others' Compare buttons are disabled (50% opacity) and read "Compare (3 max)".
 
 ### Container
 
@@ -358,6 +386,7 @@ Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus
 | `imageUrl` | string | no |
 | `price` | number | no |
 | `saved` | boolean | no |
+| `comparing`, `compareDisabled` | boolean | no |
 | `onSave`, `onCompare` | function | no |
 
 ### Accessibility
