@@ -1,11 +1,13 @@
-import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import BrowsePage from './features/browse/BrowsePage.jsx'
 
 function App() {
   return (
-    <main className="app">
-      <h1>Clean Shopper</h1>
-      <p>Find clean, non-toxic home and pantry products.</p>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<BrowsePage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
