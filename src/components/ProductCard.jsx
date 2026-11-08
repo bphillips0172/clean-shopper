@@ -57,10 +57,14 @@ function ProductCard({
         <p className="text-sm text-muted">{brand}</p>
       </div>
 
-      <p className="flex items-center gap-2 text-sm text-fg">
-        <span className="size-2 rounded-pill bg-success" aria-hidden="true" />
-        Clean score {cleanScore}/100
-      </p>
+      {cleanScore == null ? (
+        <p className="text-sm text-muted">No clean score yet</p>
+      ) : (
+        <p className="flex items-center gap-2 text-sm text-fg">
+          <span className="size-2 rounded-pill bg-success" aria-hidden="true" />
+          Clean score {cleanScore}/100
+        </p>
+      )}
 
       {shown.length > 0 && (
         <ul className="flex flex-wrap gap-2" aria-label="Certifications">

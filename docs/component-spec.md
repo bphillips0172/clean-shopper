@@ -6,18 +6,26 @@ How each UI component looks and behaves. Built from the reference components fil
 
 ## Foundations
 
-**Theme:** dark. Page background `bg-bg` (#000000), raised surfaces `bg-surface`, inset surfaces such as inputs and image wells `bg-surface-warm`.
+**Theme:** dark and light, following the device's appearance setting until someone picks one with the ThemeToggle. Components use the same token classes in both; only the values in `src/styles/tokens.css` change. Page background `bg-bg`, raised surfaces `bg-surface`, inset surfaces such as inputs and image wells `bg-surface-warm`.
 
-**Text colors**
-| Use | Class | Value |
-|---|---|---|
-| Headings, strong text | `text-fg` | #ffffff |
-| Body and secondary text | `text-muted` | #a1a1aa |
-| Placeholder text only | `text-meta` | #71717a |
+**Colors by mode** (light values proposed 2026-11-08; the Shopify reference has dark only)
+| Token | Use | Dark | Light |
+|---|---|---|---|
+| `bg` | Page | #000000 | #ffffff |
+| `surface` | Cards | #02090a | #f7f7f8 |
+| `surface-warm` | Inputs, image wells, tags | #061a1c | #eaf2f0 |
+| `fg` | Headings, strong text | #ffffff | #000000 |
+| `muted` | Body and secondary text | #a1a1aa | #52525b |
+| `meta` | Placeholder text only | #71717a | #71717a |
+| `border` | Card borders | #1e2c31 | #e4e4e7 |
+| `border-soft` | Inputs, chips, dashed panels | #3f3f46 | #8a8a93 |
+| `accent` | Focus rings | #36f4a4 | #008060 |
+| `success` | Clean score dot | #36f4a4 | #008060 |
+| `warn` | Avoided-ingredient warning | #eab308 | #a16207 |
 
-`text-meta` is about 4.1:1 on `bg-surface`, below WCAG AA for normal text. Use it only for input placeholders, never for content.
+In dark mode `text-meta` is about 4.1:1 on `bg-surface`, below WCAG AA for normal text. Use it only for input placeholders, never for content.
 
-**Accent:** `accent` (#36F4A4, neon green) is for focus rings only and never fills large surfaces. `success` has the same value and may color small status marks (a dot or an icon), always with a text label beside it.
+**Accent:** `accent` is for focus rings only and never fills large surfaces. Light mode uses a deeper green because the neon green is nearly invisible on white. `success` matches it and may color small status marks (a dot or an icon), always with a text label beside it.
 
 **Type**
 | Role | Font | Size | Weight | Line height |
@@ -129,6 +137,79 @@ The accent green is not used for the active state: it is reserved for focus ring
 
 ---
 
+## ThemeToggle
+
+> **Proposed 2026-11-08.** Built from the CategoryTag pill and Button rules above.
+
+A switch that turns dark mode on or off for the whole app. It is a shared component (`src/components/ThemeToggle.jsx`).
+
+### Look
+
+- Shape: `inline-flex items-center gap-2 rounded-pill border border-border-soft px-3 py-1`, transparent fill, hover `bg-surface-warm`.
+- Content: a 16px icon (moon when dark mode is on, sun when it is off) and the label "Dark mode" in `font-body text-sm font-medium text-fg`.
+- Focus: `focus-visible:outline-none focus-visible:shadow-focus-ring`.
+
+### Behavior
+
+- Until someone uses it, the app follows the device's appearance setting.
+- Using it saves the choice in the browser (`localStorage`), so it stays on reload. A script in `index.html` applies the saved choice before the page draws, so the page never flashes the wrong theme.
+- The choice is stored on `<html data-theme="light|dark">`, which `src/styles/tokens.css` reads.
+
+### Accessibility
+
+- A `button` with `role="switch"` and `aria-checked` set to whether dark mode is on. Screen readers announce "Dark mode, switch, on" or "off".
+- Reachable with Tab, toggled with Enter or Space.
+
+### Placement
+
+Top right of the page, on the same row as the page heading.
+
+---
+
+## SearchBar
+
+> **Proposed 2026-11-08.** Built from the Input field and Button rules above.
+
+Lets people search for products by name, brand or type. It is a shared component (`src/components/SearchBar.jsx`). It does not search by itself: the page holds the text and runs the search when the form is submitted.
+
+### Structure
+
+A `form` with `role="search"`:
+
+1. **Label:** "Search products", following the Input field label rules (`text-sm font-medium text-muted`), always visible.
+2. **Row** (`flex gap-2`):
+   - **Input:** Input field rules (`bg-surface-warm text-fg border border-border-soft rounded-md px-4 py-3 text-base`, placeholder `text-meta`, focus `border-accent shadow-focus-ring`), `type="search"`, fills the row.
+   - **Button:** small primary pill, "Search" (`bg-fg text-bg`).
+
+### Behavior
+
+- Searching runs on Enter or the Search button, not on every keystroke. Open Beauty Facts asks apps to keep searches to about 10 a minute.
+- The Search button is disabled while the field is empty or a search is running, and reads "Searching…" while it runs.
+
+### Props
+
+| Prop | Type | Required |
+|---|---|---|
+| `value` | string | yes |
+| `onChange` | function (new text) | yes |
+| `onSubmit` | function | yes |
+| `isSearching` | boolean | no |
+
+### On the browse page
+
+The SearchBar sits above the category filters. A search replaces the grid with results from Open Beauty Facts (US edition). States:
+
+| State | Shows |
+|---|---|
+| Searching | "Searching Open Beauty Facts…" (announced to screen readers) |
+| Results | "N results for "query"" with a "Clear search" ghost button, then the ProductCard grid |
+| No results | EmptyState: "No products found for "query"", action "Clear search" |
+| Error | EmptyState: "Search isn't working right now", action "Try again" |
+
+Clearing the search, or emptying the field, returns to the browse grid. The category filters are hidden while results show, since every Open Beauty Facts product is personal care.
+
+---
+
 ## EmptyState
 
 > **Approved 2026-11-08.** The reference file has no empty state, so this section builds one from the card, button and type rules above.
@@ -188,7 +269,7 @@ Shows one recommended product, why it fits the user's preferences, and the actio
 2. **Category:** a CategoryTag with the top-level category (such as Personal care, Home cleaning or Baby care), then the subcategory as `text-sm text-muted`, for example [Home] Cleaning. Row: `flex items-center gap-2 mb-1`. Tapping the tag sets the page's category filter, the same as tapping it in the filter row. The tag shows as active while the page is filtered to its category.
 3. **Name:** an `h3` element styled as card title: `font-display text-lg text-fg`, weight 400, `leading-tight` (1.00). Clamps to 2 lines.
 4. **Brand:** `text-sm text-muted`.
-5. **Clean score:** a row with an 8px `bg-success` dot and the text "Clean score 92/100" in `text-sm text-fg`. The number always appears in text, so the dot is never the only signal.
+5. **Clean score:** a row with an 8px `bg-success` dot and the text "Clean score 92/100" in `text-sm text-fg`. The number always appears in text, so the dot is never the only signal. Open Beauty Facts has no scores, so search results get a made-up placeholder score for now (`searchProducts.js`). When a product has no score at all, the row reads "No clean score yet" in `text-sm text-muted` with no dot.
 6. **Certifications:** a wrapping row of chips (`gap-2`). Each chip: `rounded-pill border border-border-soft px-3 py-1 text-sm text-muted`. Show at most 3, then a "+N" chip.
 7. **Reason:** one or two sentences on why it fits, `text-sm text-muted`, line height `leading-body`.
 8. **Preference warning (optional):** shown only when the product contains an ingredient the user avoids. `text-sm text-warn` with a 16px warning icon, for example "Contains fragrance, which you avoid". The text always names the ingredient.
@@ -210,7 +291,7 @@ Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus
 | `subcategory` | string | no |
 | `categoryActive` | boolean | no |
 | `onCategoryClick` | function | no |
-| `cleanScore` | number 0–100 | yes |
+| `cleanScore` | number 0–100 | no |
 | `certifications` | string[] | no |
 | `reason` | string | no |
 | `avoidedIngredient` | string | no |
