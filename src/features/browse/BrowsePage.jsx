@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import CategoryTag from '../../components/CategoryTag.jsx'
+import CompareTray from '../../components/CompareTray.jsx'
 import EmptyState from '../../components/EmptyState.jsx'
 import ProductCard from '../../components/ProductCard.jsx'
 import SearchBar from '../../components/SearchBar.jsx'
@@ -15,7 +16,17 @@ const ghostButton =
 // status: idle (browsing), searching, done or error
 const NO_SEARCH = { status: 'idle', query: '', results: [] }
 
-function BrowsePage({ savedIds = [], toggleSaved = () => {} }) {
+function BrowsePage({
+  savedIds = [],
+  toggleSaved = () => {},
+  compareList = [],
+  maxCompare = 3,
+  toggleCompare = () => {},
+  clearCompare = () => {},
+}) {
+  const compareIds = compareList.map((item) => item.id)
+  const compareFull = compareList.length >= maxCompare
+
   // Another page can open Browse already filtered, e.g. from a category tag on the landing page.
   const { state } = useLocation()
   const [selectedCategory, setSelectedCategory] = useState(state?.category ?? ALL)
@@ -62,6 +73,9 @@ function BrowsePage({ savedIds = [], toggleSaved = () => {} }) {
             {...product}
             saved={savedIds.includes(id)}
             onSave={() => toggleSaved({ id, ...product })}
+            comparing={compareIds.includes(id)}
+            compareDisabled={compareFull && !compareIds.includes(id)}
+            onCompare={() => toggleCompare({ id, ...product })}
             categoryActive={!isSearchMode && product.category === selectedCategory}
             onCategoryClick={() => showCategory(product.category)}
           />
@@ -158,6 +172,10 @@ function BrowsePage({ savedIds = [], toggleSaved = () => {} }) {
         ) : (
           renderGrid(shownProducts)
         ))}
+
+      {compareList.length > 0 && (
+        <CompareTray products={compareList} max={maxCompare} onRemove={toggleCompare} onClear={clearCompare} />
+      )}
     </main>
   )
 }

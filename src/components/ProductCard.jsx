@@ -20,6 +20,8 @@ function ProductCard({
   price,
   saved = false,
   onSave,
+  comparing = false,
+  compareDisabled = false,
   onCompare,
 }) {
   const shown = certifications.slice(0, MAX_CERTIFICATIONS)
@@ -134,10 +136,19 @@ function ProductCard({
         {onCompare && (
           <button
             type="button"
+            aria-pressed={comparing}
+            disabled={compareDisabled}
             onClick={onCompare}
-            className={`${buttonBase} border-fg bg-transparent text-fg hover:bg-fg hover:text-bg`}
+            className={`${buttonBase} border-fg text-fg disabled:cursor-not-allowed disabled:opacity-50 ${
+              comparing ? 'bg-surface-warm' : 'bg-transparent enabled:hover:bg-fg enabled:hover:text-bg'
+            }`}
           >
-            Compare
+            {comparing && (
+              <svg className="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M5 12l4.5 4.5L19 7" />
+              </svg>
+            )}
+            {comparing ? 'Comparing' : compareDisabled ? 'Compare (3 max)' : 'Compare'}
           </button>
         )}
       </div>
