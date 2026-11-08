@@ -89,6 +89,31 @@ The base panel that other components build on.
 
 ---
 
+## CategoryTag
+
+> **Approved 2026-11-08.** The reference file has no tags, so this section builds one from the chip and type rules above.
+
+A small read-only label naming a product's category, such as "Home", "Personal care" or "Pantry". It is a shared component (`src/components/CategoryTag.jsx`). It is not clickable and takes no keyboard focus.
+
+### Look
+
+- Shape: `inline-flex items-center rounded-pill px-3 py-1`.
+- Fill: `bg-surface-warm`, no border. This tells it apart from the outlined certification chips on ProductCard.
+- Text: `font-body text-sm font-medium text-fg`, single line (`whitespace-nowrap`).
+
+### Props
+
+| Prop | Type | Required |
+|---|---|---|
+| `label` | string | yes |
+
+### Accessibility
+
+- Rendered as a `span`, so screen readers read it as plain text.
+- `text-fg` on `bg-surface-warm` is well above WCAG AA.
+
+---
+
 ## ProductCard
 
 > **Approved 2026-11-08.** The reference file has no product card, so this section builds one from the Card, Button and type rules above plus the brief.

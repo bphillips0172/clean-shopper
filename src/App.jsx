@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import CategoryTag from './components/CategoryTag.jsx'
 import ProductCard from './components/ProductCard.jsx'
 
 // Placeholder products for previewing ProductCard.
@@ -42,9 +43,18 @@ function App() {
   return (
     <main className="mx-auto max-w-[var(--container-max)] px-container-phone py-section-phone sm:px-container-tablet sm:py-section-tablet lg:px-container-desktop lg:py-section-desktop">
       <h1 className="font-display text-xl font-[360] leading-[1.14] tracking-[0.32px] text-fg">
-        ProductCard preview
+        Component preview
       </h1>
-      <h2 className="mt-3 text-lg text-muted">Recommended for you</h2>
+      <h2 className="mt-3 text-lg text-muted">Categories</h2>
+      <ul className="mt-4 flex flex-wrap gap-2">
+        {['Home', 'Personal care', 'Pantry'].map((label) => (
+          <li key={label}>
+            <CategoryTag label={label} />
+          </li>
+        ))}
+      </ul>
+
+      <h2 className="mt-8 text-lg text-muted">Recommended for you</h2>
 
       <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {sampleProducts.map(({ id, ...product }) => (
