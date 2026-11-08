@@ -1,7 +1,7 @@
 // Searches Open Beauty Facts (US edition) and turns its products into ProductCard props.
 // No account or key is needed. Their guidance is about 10 searches a minute per user.
 const SEARCH_URL = 'https://us.openbeautyfacts.org/cgi/search.pl'
-const FIELDS = 'code,product_name,brands,image_front_small_url,categories_tags,labels_tags,ingredients_text'
+const FIELDS = 'code,product_name,brands,image_front_url,categories_tags,labels_tags,ingredients_text'
 
 // Tags that say nothing useful about the product.
 const IGNORED_TAGS = new Set([
@@ -78,7 +78,7 @@ function toCardProps(product) {
     certifications,
     reason,
     avoidedIngredient: hasFragrance ? 'fragrance' : undefined,
-    imageUrl: product.image_front_small_url,
+    imageUrl: product.image_front_url,
   }
 }
 

@@ -6,6 +6,8 @@ import { expect, test } from '@playwright/test'
 // `npm test`. Run it with: npm run walkthrough
 test.skip(!process.env.WALKTHROUGH, 'Set WALKTHROUGH=1 to run the shopper walkthrough')
 
+test.use({ permissions: ['clipboard-read', 'clipboard-write'] })
+
 test('a shopper browses, searches, fills a cart and checks out', async ({ page }, testInfo) => {
   const dir = `walkthrough-screenshots/${testInfo.project.name}`
   let step = 0
@@ -56,29 +58,29 @@ test('a shopper browses, searches, fills a cart and checks out', async ({ page }
   await page.evaluate(() => window.scrollTo(0, 0))
   await cartLink.click()
   await expect(page).toHaveURL('/saved')
-  await shot('cart', `${await page.getByRole('article').count()} products shown; ${await page.locator('main p').first().textContent()}`)
+  const cartRows = page.locator('main ul > li')
+  await shot('cart', `${await cartRows.count()} rows; ${await page.getByRole('complementary').innerText()}`.replace(/\n+/g, ' | '))
 
-  // 8. Go to checkout
-  await page.getByRole('link', { name: 'Proceed to checkout' }).click()
+  // 8. Go to the email step
+  await page.getByRole('link', { name: 'Email my cart' }).click()
   await expect(page).toHaveURL('/checkout')
-  await shot('checkout', `${await page.locator('main li').count()} rows`)
+  await shot('email-cart', `${await page.locator('main ul > li').count()} rows grouped by category`)
 
-  // 9. Fill in the send-my-list form
-  await page.getByLabel('Your name').fill('Jordan Rivera')
-  await page.getByLabel('Email address').fill('jordan@example.com')
-  await page.getByRole('button', { name: 'Send my list' }).scrollIntoViewIfNeeded()
-  await shot('checkout-form-filled')
+  // 9. Copy the list
+  await page.getByRole('button', { name: 'Copy list' }).click()
+  await expect(page.getByText(/Copied|Couldn’t copy/)).toBeVisible()
+  await page.getByRole('button', { name: 'Copy list' }).scrollIntoViewIfNeeded()
+  await shot('copied-list', await page.getByText(/Copied|Couldn’t copy/).textContent())
 
-  // 10. Send it
-  await page.getByRole('button', { name: 'Send my list' }).click()
-  await shot('checkout-sent', await page.getByRole('heading', { level: 1 }).textContent())
+  // 10. Remove a product from the cart
+  await page.getByRole('link', { name: 'Cart', exact: true }).first().click()
+  await expect(page).toHaveURL('/saved')
+  await page.getByRole('button', { name: /^Remove / }).first().click()
+  await shot('removed-one', `${await cartRows.count()} row left; header reads "${await cartLink.textContent()}"`)
 
-  // 11. Head back to the cart afterwards
-  await page.getByRole('link', { name: 'Back to cart' }).click()
-  await shot('cart-after-sending', `${await page.getByRole('article').count()} products still in cart`)
-
-  // 12. Try dark mode
+  // 11. Try dark mode
   await page.getByRole('switch', { name: 'Dark mode' }).click()
+  await page.waitForTimeout(300) // let the color fade finish
   await shot('dark-mode')
 
   await testInfo.attach('notes', { body: notes.join('\n'), contentType: 'text/plain' })
