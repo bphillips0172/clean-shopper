@@ -1,77 +1,58 @@
-import { Link } from 'react-router'
-import ProductCard from '../../components/ProductCard.jsx'
+import { Link, useNavigate } from 'react-router'
+import CartItem from '../../components/CartItem.jsx'
+import CartSummary from '../../components/CartSummary.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
 
 const container =
   'mx-auto max-w-[var(--container-max)] px-container-phone py-section-phone sm:px-container-tablet sm:py-section-tablet lg:px-container-desktop lg:py-section-desktop'
 
+const primaryButton =
+  'inline-flex items-center justify-center gap-2 rounded-pill border border-transparent bg-fg px-4 py-2 font-display text-sm leading-body text-bg transition-all duration-base ease-standard hover:opacity-90 focus-visible:outline-none focus-visible:shadow-focus-ring'
+const ghostButton =
+  'inline-flex items-center justify-center gap-2 rounded-pill border border-fg bg-transparent px-4 py-2 font-display text-sm leading-body text-fg transition-all duration-base ease-standard hover:bg-fg hover:text-bg focus-visible:outline-none focus-visible:shadow-focus-ring'
+
 function SavedPage({ cart = [], toggleSaved = () => {} }) {
-  const savedProducts = cart
+  const navigate = useNavigate()
 
   return (
     <main className={container}>
       <h1 className="font-display text-xl font-normal leading-tight text-fg">Your cart</h1>
       <p className="mt-3 text-lg text-muted">
-        {savedProducts.length === 0
-          ? 'Your cart is empty.'
-          : `${savedProducts.length} product${savedProducts.length === 1 ? '' : 's'} in your cart.`}
+        {cart.length === 0
+          ? 'Nothing in your cart yet.'
+          : `${cart.length} product${cart.length === 1 ? '' : 's'} in your cart.`}
       </p>
 
-      {savedProducts.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center gap-4 text-center">
-          <svg
-            className="size-12 text-muted"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="4" y="3" width="12" height="14" rx="2" />
-            <path d="M7 7h6M7 10h6M7 13h4" />
-          </svg>
-          <p className="max-w-[32ch] text-base leading-body text-muted">
-            Browse products and hit "Add to cart" to build your clean shopping cart.
-          </p>
-          <Link
-            to="/browse"
-            className="inline-flex items-center gap-2 rounded-pill border-2 border-transparent bg-fg py-3 pl-4 pr-[26px] font-display text-base leading-body text-bg transition-all duration-base ease-standard hover:opacity-90 focus-visible:outline-none focus-visible:shadow-focus-ring"
-          >
-            Browse products
-          </Link>
+      {cart.length === 0 ? (
+        <div className="mt-8">
+          <EmptyState
+            title="Your cart is empty"
+            message="Add products from Browse or search, and they’ll show up here."
+            actionLabel="Browse products"
+            onAction={() => navigate('/browse')}
+          />
         </div>
       ) : (
-        <>
-          <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {savedProducts.map(({ id, ...product }) => (
-              <li key={id}>
-                <ProductCard
-                  {...product}
-                  saved
-                  onSave={() => toggleSaved({ id, ...product })}
-                />
-              </li>
+        <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
+          <ul className="flex flex-col gap-3 lg:col-span-2">
+            {cart.map((product) => (
+              <CartItem key={product.id} {...product} onRemove={() => toggleSaved(product)} />
             ))}
           </ul>
-          <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-border pt-8">
-            <Link
-              to="/checkout"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-pill border-2 border-transparent bg-fg py-3 pl-4 pr-[26px] font-display text-base leading-body text-bg transition-all duration-base ease-standard hover:opacity-90 focus-visible:outline-none focus-visible:shadow-focus-ring"
-            >
-              Proceed to checkout
-              <svg className="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </Link>
-            <Link
-              to="/browse"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-pill border-2 border-fg bg-transparent py-3 pl-4 pr-[26px] font-display text-base leading-body text-fg transition-all duration-base ease-standard hover:bg-fg hover:text-bg focus-visible:outline-none focus-visible:shadow-focus-ring"
-            >
-              Keep browsing
-            </Link>
-          </div>
-        </>
+
+          <aside className="flex flex-col gap-5 rounded-md border border-border bg-surface p-6 shadow-raised">
+            <h2 className="font-display text-lg font-normal leading-tight text-fg">Summary</h2>
+            <CartSummary products={cart} />
+            <div className="flex flex-col gap-3">
+              <Link to="/checkout" className={primaryButton}>
+                Email my cart
+              </Link>
+              <Link to="/browse" className={ghostButton}>
+                Keep browsing
+              </Link>
+            </div>
+          </aside>
+        </div>
       )}
     </main>
   )

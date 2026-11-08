@@ -280,6 +280,43 @@ When the selected category has no products: title "No products in this category 
 
 ---
 
+## CartItem
+
+> **Proposed 2026-11-08.** Built from the Card and type rules above.
+
+One product in the cart, as a compact row: shorter than a ProductCard so the cart stays scannable on a phone. It is a shared component (`src/components/CartItem.jsx`), used on the cart and email pages.
+
+### Structure
+
+A `li`: `flex items-start gap-4 rounded-md border border-border bg-surface p-4 shadow-raised`.
+
+- **Left, fills the row:** name (`font-display text-base text-fg`, wraps, never cut off), then "Brand · Category, subcategory" in `text-sm text-muted`, then the clean score row from ProductCard when there is one.
+- **Right:** the price (`font-display text-base text-fg`) or "Price not listed" (`text-sm text-muted`), and under it a "Remove" text button with an × icon (`text-sm text-muted`, hover `text-fg`), labelled "Remove {name} from cart" for screen readers.
+
+### Props
+
+`name`, `brand`, `category` (required); `subcategory`, `cleanScore`, `price`, `onRemove` (optional).
+
+---
+
+## CartSummary
+
+> **Proposed 2026-11-08.**
+
+The totals panel on the cart and email pages (`src/components/CartSummary.jsx`): a "Products" count, then a "Subtotal" row in `font-display text-base`. The subtotal counts only products with a price. When some have none, a `text-sm text-muted` note says how many were left out ("1 product has no listed price and isn't included"), and when none have a price the subtotal shows "—" rather than $0.00.
+
+---
+
+## Cart and email pages
+
+> **Proposed 2026-11-08.**
+
+- **Cart** (`/saved`, "Your cart"): CartItem rows on the left (two-thirds width on desktop), and a "Summary" panel with CartSummary, "Email my cart" (small primary) and "Keep browsing" (small ghost). Empty cart: EmptyState "Your cart is empty" with "Browse products".
+- **Email** (`/checkout`, "Email your cart"): breadcrumb Cart › Email, CartItem rows grouped under a heading per category, and a "Send it to yourself" panel with CartSummary, "Open email" and "Copy list". Clean Shopper has no email service, so "Open email" opens the shopper's own email app with the list filled in (a `mailto:` link) and "Copy list" copies the same text. The panel says so plainly and never claims the app sent anything.
+- **Words:** the cart is always called the cart: "Add to cart", "In cart", "Cart", "Your cart", "Email my cart". The emailed or copied text is "the list". Avoid "checkout" in what people read, since the app doesn’t take payment.
+
+---
+
 ## ProductCard
 
 > **Approved 2026-11-08.** The reference file has no product card, so this section builds one from the Card, Button and type rules above plus the brief.
@@ -291,14 +328,14 @@ Shows one recommended product, why it fits the user's preferences, and the actio
 1. **Image well:** 4:3 frame, `bg-surface-warm rounded-md`, image covers the frame. Without an image it shows a centered 36px outline icon (`size-8`) in `text-muted`. The image's alt text is the product name.
 2. **Category:** a CategoryTag with the top-level category (such as Personal care, Home cleaning or Baby care), then the subcategory as `text-sm text-muted`, for example [Home] Cleaning. Row: `flex items-center gap-2 mb-1`. Tapping the tag sets the page's category filter, the same as tapping it in the filter row. The tag shows as active while the page is filtered to its category.
 3. **Name:** an `h3` element styled as card title: `font-display text-lg text-fg`, weight 400, `leading-tight` (1.00). Clamps to 2 lines.
-4. **Brand:** `text-sm text-muted`.
+4. **Brand and price:** brand in `text-sm text-muted`, then the price in `font-display text-base text-fg`. Products without a price (search results) show "Price not listed" in `text-sm text-muted` instead.
 5. **Clean score:** a row with an 8px `bg-success` dot and the text "Clean score 92/100" in `text-sm text-fg`. The number always appears in text, so the dot is never the only signal. Open Beauty Facts has no scores, so search results get a made-up placeholder score for now (`searchProducts.js`). When a product has no score at all, the row reads "No clean score yet" in `text-sm text-muted` with no dot.
 6. **Certifications:** a wrapping row of chips (`gap-2`). Each chip: `rounded-pill border border-border-soft px-3 py-1 text-sm text-muted`. Show at most 3, then a "+N" chip.
 7. **Reason:** one or two sentences on why it fits, `text-sm text-muted`, line height `leading-body`.
 8. **Preference warning (optional):** shown only when the product contains an ingredient the user avoids. `text-sm text-warn` with a 16px warning icon, for example "Contains fragrance, which you avoid". The text always names the ingredient.
 9. **Actions:** a wrapping row (`gap-3`, `mt-auto` so actions align across cards in a grid), using the small button size:
-   - Primary button "Save to list". When saved it reads "Saved" and sets `aria-pressed="true"`.
-   - Ghost button "Compare".
+   - "Add to cart": small primary pill (`bg-fg text-bg`). Once added it changes to an outlined pill (`border-fg bg-transparent text-fg`, hover `bg-surface-warm`) with a 16px check icon reading "In cart", and sets `aria-pressed="true"`. Pressing it again removes the product. The two states differ in fill, icon and label, not just wording.
+   - "Compare": small ghost pill, shown only when the page passes `onCompare`. No page supports comparing yet, so it doesn't appear.
 
 ### Container
 
@@ -319,6 +356,7 @@ Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus
 | `reason` | string | no |
 | `avoidedIngredient` | string | no |
 | `imageUrl` | string | no |
+| `price` | number | no |
 | `saved` | boolean | no |
 | `onSave`, `onCompare` | function | no |
 
@@ -330,4 +368,4 @@ Card rules (`bg-surface border border-border rounded-md p-6 shadow-raised`) plus
 
 ### Out of scope
 
-Price and retailer links are left out: V1 has no retailer integrations.
+Retailer links are left out: V1 has no retailer integrations.

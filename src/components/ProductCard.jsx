@@ -57,8 +57,10 @@ function ProductCard({
         </h3>
         <div className="flex items-baseline gap-3">
           <p className="text-sm text-muted">{brand}</p>
-          {price != null && (
+          {price != null ? (
             <p className="font-display text-base font-normal text-fg">${price.toFixed(2)}</p>
+          ) : (
+            <p className="text-sm text-muted">Price not listed</p>
           )}
         </div>
       </div>
@@ -112,21 +114,32 @@ function ProductCard({
       )}
 
       <div className="mt-auto flex flex-wrap gap-3">
+        {/* Added products switch to an outlined pill with a check, so the two states look different. */}
         <button
           type="button"
           aria-pressed={saved}
           onClick={onSave}
-          className={`${buttonBase} border-transparent bg-fg text-bg hover:opacity-90`}
+          className={`${buttonBase} ${
+            saved ? 'border-fg bg-transparent text-fg hover:bg-surface-warm' : 'border-transparent bg-fg text-bg hover:opacity-90'
+          }`}
         >
+          {saved && (
+            <svg className="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12l4.5 4.5L19 7" />
+            </svg>
+          )}
           {saved ? 'In cart' : 'Add to cart'}
         </button>
-        <button
-          type="button"
-          onClick={onCompare}
-          className={`${buttonBase} border-fg bg-transparent text-fg hover:bg-fg hover:text-bg`}
-        >
-          Compare
-        </button>
+        {/* Compare shows only where a page supports comparing. */}
+        {onCompare && (
+          <button
+            type="button"
+            onClick={onCompare}
+            className={`${buttonBase} border-fg bg-transparent text-fg hover:bg-fg hover:text-bg`}
+          >
+            Compare
+          </button>
+        )}
       </div>
     </article>
   )
