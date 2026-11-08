@@ -139,7 +139,7 @@ The accent green is not used for the active state: it is reserved for focus ring
 
 ## ThemeToggle
 
-> **Proposed 2026-11-08.** Built from the CategoryTag pill and Button rules above.
+> **Approved 2026-11-08.** Built from the CategoryTag pill and Button rules above.
 
 A switch that turns dark mode on or off for the whole app. It is a shared component (`src/components/ThemeToggle.jsx`).
 
@@ -168,7 +168,7 @@ Top right of the page, on the same row as the page heading.
 
 ## SearchBar
 
-> **Proposed 2026-11-08.** Built from the Input field and Button rules above.
+> **Approved 2026-11-08.** Built from the Input field and Button rules above.
 
 Lets people search for products by name, brand or type. It is a shared component (`src/components/SearchBar.jsx`). It does not search by itself: the page holds the text and runs the search when the form is submitted.
 
