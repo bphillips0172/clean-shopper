@@ -8,7 +8,7 @@ How each UI component looks and behaves. Built from the reference components fil
 
 **Theme:** dark and light, following the device's appearance setting until someone picks one with the ThemeToggle. Components use the same token classes in both; only the values in `src/styles/tokens.css` change. Page background `bg-bg`, raised surfaces `bg-surface`, inset surfaces such as inputs and image wells `bg-surface-warm`.
 
-**Colors by mode** (light values proposed 2026-11-08; the Shopify reference has dark only)
+**Colors by mode** (light values approved 2026-11-08; the Shopify reference has dark only)
 | Token | Use | Dark | Light |
 |---|---|---|---|
 | `bg` | Page | #000000 | #ffffff |
