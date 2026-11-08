@@ -129,6 +129,53 @@ The accent green is not used for the active state: it is reserved for focus ring
 
 ---
 
+## EmptyState
+
+> **Approved 2026-11-08.** The reference file has no empty state, so this section builds one from the card, button and type rules above.
+
+Shown in place of content when there is nothing to show, such as a category with no products, an empty shopping list or a search with no results. It says what is missing and offers a way forward. It is a shared component (`src/components/EmptyState.jsx`).
+
+### Structure (top to bottom, centered)
+
+1. **Icon:** 36px outline icon (`size-8`, stroke 1.75) in `text-muted`, decorative (`aria-hidden`).
+2. **Title:** an `h3` in `font-display text-lg font-normal leading-tight text-fg`.
+3. **Message (optional):** `text-sm leading-body text-muted`.
+4. **Action (optional):** a small ghost pill button (see Button, small size): `border-fg bg-transparent text-fg`, hover `bg-fg text-bg`.
+
+### Container
+
+`flex flex-col items-center gap-3 rounded-md border border-dashed border-border-soft p-8 text-center`. No fill and no shadow: the dashed border reads as a space waiting for content, not as a card.
+
+### States
+
+| State | Shows |
+|---|---|
+| Default | Icon, title, message |
+| With action | Icon, title, message, button |
+| Title only | Icon, title |
+
+The button appears only when both `actionLabel` and `onAction` are given.
+
+### Props
+
+| Prop | Type | Required |
+|---|---|---|
+| `title` | string | yes |
+| `message` | string | no |
+| `actionLabel` | string | no |
+| `onAction` | function | no |
+
+### Accessibility
+
+- The button is a real `button`, reachable with Tab, with the green focus ring.
+- `text-muted` and `text-fg` on `bg-bg` are both above WCAG AA.
+
+### On the browse page
+
+When the selected category has no products: title "No products in this category yet.", message "We're still finding clean {category} products.", action "Show all products", which sets the filter back to All.
+
+---
+
 ## ProductCard
 
 > **Approved 2026-11-08.** The reference file has no product card, so this section builds one from the Card, Button and type rules above plus the brief.

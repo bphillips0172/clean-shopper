@@ -1,5 +1,5 @@
 // Placeholder products for the browse page until real recommendations exist.
-export const categories = ['Personal care', 'Home cleaning', 'Baby care']
+export const categories = ['Personal care', 'Home cleaning', 'Baby care', 'Pantry']
 
 export const placeholderProducts = [
   {

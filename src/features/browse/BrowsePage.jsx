@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import CategoryTag from '../../components/CategoryTag.jsx'
+import EmptyState from '../../components/EmptyState.jsx'
 import ProductCard from '../../components/ProductCard.jsx'
 import { categories, placeholderProducts } from './placeholderProducts.js'
 
@@ -41,7 +42,14 @@ function BrowsePage() {
       <h2 className="sr-only">Products</h2>
 
       {shownProducts.length === 0 ? (
-        <p className="mt-8 text-base text-muted">No products in this category yet.</p>
+        <div className="mt-8">
+          <EmptyState
+            title="No products in this category yet."
+            message={`We're still finding clean ${selectedCategory.toLowerCase()} products.`}
+            actionLabel="Show all products"
+            onAction={() => setSelectedCategory(ALL)}
+          />
+        </div>
       ) : (
         <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {shownProducts.map(({ id, ...product }) => (
