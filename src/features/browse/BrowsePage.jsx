@@ -6,16 +6,16 @@ import { categories, placeholderProducts } from './placeholderProducts.js'
 const ALL = 'All'
 
 function BrowsePage() {
-  const [activeCategory, setActiveCategory] = useState(ALL)
+  const [selectedCategory, setSelectedCategory] = useState(ALL)
   const [savedIds, setSavedIds] = useState([])
 
   const toggleSaved = (id) =>
     setSavedIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]))
 
   const shownProducts =
-    activeCategory === ALL
+    selectedCategory === ALL
       ? placeholderProducts
-      : placeholderProducts.filter((product) => product.category === activeCategory)
+      : placeholderProducts.filter((product) => product.category === selectedCategory)
 
   return (
     <main className="mx-auto max-w-[var(--container-max)] px-container-phone py-section-phone sm:px-container-tablet sm:py-section-tablet lg:px-container-desktop lg:py-section-desktop">
@@ -27,8 +27,8 @@ function BrowsePage() {
           <CategoryTag
             key={label}
             label={label}
-            isActive={label === activeCategory}
-            onClick={() => setActiveCategory(label)}
+            isActive={label === selectedCategory}
+            onClick={() => setSelectedCategory(label)}
           />
         ))}
       </div>
@@ -45,8 +45,8 @@ function BrowsePage() {
                 {...product}
                 saved={savedIds.includes(id)}
                 onSave={() => toggleSaved(id)}
-                categoryActive={product.category === activeCategory}
-                onCategoryClick={() => setActiveCategory(product.category)}
+                categoryActive={product.category === selectedCategory}
+                onCategoryClick={() => setSelectedCategory(product.category)}
               />
             </li>
           ))}
