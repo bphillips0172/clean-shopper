@@ -22,7 +22,12 @@ function BrowsePage() {
       <h1 className="font-display text-xl font-normal leading-tight text-fg">Browse</h1>
       <p className="mt-3 text-lg text-muted">Clean products picked for your home and family.</p>
 
-      <div role="group" aria-label="Filter by category" className="mt-6 flex flex-wrap gap-2">
+      <div
+        role="group"
+        aria-label="Filter by category"
+        onFocus={(event) => event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })}
+        className="-mx-container-phone mt-5 flex gap-2 overflow-x-auto scroll-px-container-phone px-container-phone py-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+      >
         {[ALL, ...categories].map((label) => (
           <CategoryTag
             key={label}
