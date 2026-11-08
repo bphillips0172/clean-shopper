@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
+import { useLocation } from 'react-router'
 import CategoryTag from '../../components/CategoryTag.jsx'
 import EmptyState from '../../components/EmptyState.jsx'
 import ProductCard from '../../components/ProductCard.jsx'
 import SearchBar from '../../components/SearchBar.jsx'
-import ThemeToggle from '../../components/ThemeToggle.jsx'
 import { categories, placeholderProducts } from './placeholderProducts.js'
 import { searchProducts } from './searchProducts.js'
 
@@ -16,7 +16,9 @@ const ghostButton =
 const NO_SEARCH = { status: 'idle', query: '', results: [] }
 
 function BrowsePage() {
-  const [selectedCategory, setSelectedCategory] = useState(ALL)
+  // Another page can open Browse already filtered, e.g. from a category tag on the landing page.
+  const { state } = useLocation()
+  const [selectedCategory, setSelectedCategory] = useState(state?.category ?? ALL)
   const [savedIds, setSavedIds] = useState([])
   const [searchText, setSearchText] = useState('')
   const [search, setSearch] = useState(NO_SEARCH)
@@ -74,10 +76,7 @@ function BrowsePage() {
 
   return (
     <main className="mx-auto max-w-[var(--container-max)] px-container-phone py-section-phone sm:px-container-tablet sm:py-section-tablet lg:px-container-desktop lg:py-section-desktop">
-      <div className="flex items-start justify-between gap-4">
-        <h1 className="font-display text-xl font-normal leading-tight text-fg">Browse</h1>
-        <ThemeToggle />
-      </div>
+      <h1 className="font-display text-xl font-normal leading-tight text-fg">Browse</h1>
       <p className="mt-3 text-lg text-muted">Clean products picked for your home and family.</p>
 
       <div className="mt-6">
