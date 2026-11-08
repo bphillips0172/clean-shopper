@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse — Clean Shopper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap">
+
+<style>
+:root {
+  --bg:        #f7f8f5;
+  --bg-alt:    #eef0ea;
+  --fg:        #1f2a24;
+  --fg-muted:  #5a6860;
+  --accent:    #3d6b52;
+  --accent-lt: #d6e8dc;
+  --border:    #d3d9d0;
+  --white:     #ffffff;
+
+  --font-display: 'Lora', Georgia, serif;
+  --font-ui:      'Inter', system-ui, sans-serif;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.375rem;
+  --text-2xl:  1.875rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        #141a16;
+    --bg-alt:    #1c2620;
+    --fg:        #e8ede9;
+    --fg-muted:  #8fa898;
+    --accent:    #6aaa83;
+    --accent-lt: #1e3329;
+    --border:    #2c3a31;
+    --white:     #1c2620;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:        #141a16;
+  --bg-alt:    #1c2620;
+  --fg:        #e8ede9;
+  --fg-muted:  #8fa898;
+  --accent:    #6aaa83;
+  --accent-lt: #1e3329;
+  --border:    #2c3a31;
+  --white:     #1c2620;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg:        #f7f8f5;
+  --bg-alt:    #eef0ea;
+  --fg:        #1f2a24;
+  --fg-muted:  #5a6860;
+  --accent:    #3d6b52;
+  --accent-lt: #d6e8dc;
+  --border:    #d3d9d0;
+  --white:     #ffffff;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px));
+}
+
+/* NAV */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--fg);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-links .active-link { color: var(--fg); font-weight: 500; }
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 9px;
+  cursor: pointer;
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { color: var(--fg); border-color: var(--fg-muted); }
+
+.btn-nav {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.btn-nav:hover { opacity: 0.88; }
+
+/* Dark mode: button swap to outlined style so text stays legible */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn-nav {
+    background: var(--accent-lt);
+    color: var(--accent);
+  }
+}
+:root[data-theme="dark"] .btn-nav { background: var(--accent-lt); color: var(--accent); }
+:root[data-theme="light"] .btn-nav { background: var(--accent); color: #ffffff; }
+
+.list-badge {
+  background: rgba(255,255,255,0.25);
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  display: none;
+}
+.list-badge.visible { display: inline-block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .list-badge { background: var(--accent); color: var(--accent-lt); }
+}
+:root[data-theme="dark"] .list-badge { background: var(--accent); color: var(--accent-lt); }
+
+/* PAGE HEADER */
+.page-header {
+  padding-block: 36px 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.page-header h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.search-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.search-wrap svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-muted);
+  pointer-events: none;
+}
+.search-input {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--fg);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px 10px 36px;
+  width: 240px;
+  outline: none;
+  appearance: none;
+}
+.search-input::placeholder { color: var(--fg-muted); }
+.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-lt); }
+
+/* FILTERS */
+.filters-bar {
+  padding-block: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.filter-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+.category-tabs { display: flex; gap: 4px; }
+.tab {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--fg-muted);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--fg); background: var(--bg-alt); }
+.tab.active { color: var(--accent); background: var(--accent-lt); font-weight: 500; }
+.cert-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.cert-chip {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--fg-muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cert-chip:hover { border-color: var(--fg-muted); color: var(--fg); }
+.cert-chip.active { color: var(--accent); background: var(--accent-lt); border-color: var(--accent-lt); }
+
+/* RESULTS HEADER */
+.results-header {
+  padding-block: 20px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.results-count { font-size: var(--text-sm); color: var(--fg-muted); }
+.sort-wrap { display: flex; align-items: center; gap: 8px; font-size: var(--text-sm); color: var(--fg-muted); }
+.sort-select {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--fg);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  outline: none;
+}
+.sort-select:focus { border-color: var(--accent); }
+
+/* PRODUCT GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding-bottom: 72px;
+}
+
+/* PRODUCT CARD */
+.product-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s;
+}
+.product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+.card-img {
+  height: 148px;
+  background: var(--accent-lt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.card-img svg { color: var(--accent); opacity: 0.55; }
+
+.card-top {
+  padding: 16px 20px 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.card-name {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--fg);
+  margin-bottom: 3px;
+}
+.card-sub { font-size: var(--text-xs); color: var(--fg-muted); line-height: 1.5; }
+.score-badge {
+  flex-shrink: 0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  text-align: center;
+  min-width: 48px;
+}
+.score-badge.score-high { background: var(--accent); color: #ffffff; }
+.score-badge.score-mid  { background: #fde9cd; color: #8a4f0e; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .score-badge.score-mid { background: #3d2606; color: #f2a84c; }
+}
+:root[data-theme="dark"] .score-badge.score-mid { background: #3d2606; color: #f2a84c; }
+.score-num { display: block; font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; line-height: 1; }
+.score-label { display: block; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.8; margin-top: 2px; }
+
+.card-body { padding: 14px 20px 18px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.ingredient-label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 7px;
+}
+.pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { padding: 3px 9px; border-radius: 20px; font-size: var(--text-xs); font-weight: 500; }
+.pill-good    { background: #d6ead9; color: #286630; }
+.pill-warn    { background: #fde9cd; color: #8a4f0e; }
+.pill-neutral { background: var(--bg-alt); color: var(--fg-muted); border: 1px solid var(--border); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .pill-good { background: #1a3d1e; color: #7ac87f; }
+  :root:not([data-theme="light"]) .pill-warn { background: #3d2606; color: #f2a84c; }
+}
+:root[data-theme="dark"] .pill-good { background: #1a3d1e; color: #7ac87f; }
+:root[data-theme="dark"] .pill-warn { background: #3d2606; color: #f2a84c; }
+
+.certs-row { display: flex; flex-wrap: wrap; gap: 5px; padding-top: 10px; border-top: 1px solid var(--border); }
+.cert-tag {
+  font-size: var(--text-xs);
+  color: var(--fg-muted);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+}
+.card-actions { margin-top: auto; padding-top: 2px; }
+.btn-add {
+  width: 100%;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-lt);
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+.btn-add:hover { opacity: 0.85; }
+.btn-add.saved { color: var(--fg-muted); background: var(--bg-alt); }
+
+/* EMPTY STATE */
+.empty-state { grid-column: 1 / -1; text-align: center; padding: 72px 24px; display: none; }
+.empty-state p { font-size: var(--text-lg); font-family: var(--font-display); margin-bottom: 8px; }
+.empty-state span { font-size: var(--text-sm); color: var(--fg-muted); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) {
+  .product-grid { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .search-input { width: 100%; }
+  .search-wrap { width: 100%; }
+  .nav-links { display: none; }
+  .filter-divider { display: none; }
+  .filters-bar { gap: 12px; }
+  .category-tabs { flex-wrap: wrap; }
+}
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<nav>
+  <a class="nav-logo" href="landing.html">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+      <path d="M11 2C6.58 2 3 5.58 3 10c0 3.54 2.29 6.53 5.47 7.59L11 20l2.53-2.41C16.71 16.53 19 13.54 19 10c0-4.42-3.58-8-8-8z" fill="var(--accent)" opacity="0.18"/>
+      <path d="M11 4.5c-1.8 1.4-3.5 3.6-3.5 6 0 1.4.6 2.6 1.5 3.5C10 15 11 15.5 11 17c0-1.5 1-2 1.9-3 .9-.9 1.6-2.1 1.6-3.5 0-2.4-1.7-4.6-3.5-6z" fill="var(--accent)"/>
+    </svg>
+    Clean Shopper
+  </a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="landing.html">Home</a></li>
+      <li><a href="#" class="active-link">Browse</a></li>
+    </ul>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">
+      <svg id="icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M13.5 10.5A6 6 0 015.5 2.5a6 6 0 108 8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      </svg>
+      <svg id="icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="display:none">
+        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.42 1.42M11.53 11.53l1.42 1.42M3.05 12.95l1.42-1.42M11.53 4.47l1.42-1.42" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <a href="#" class="btn-nav" id="list-btn">
+      My list
+      <span class="list-badge" id="list-badge" aria-live="polite"></span>
+    </a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Browse products</h1>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M10.5 10.5L13 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <input class="search-input" type="search" id="search" placeholder="Search products or brands…" aria-label="Search products">
+  </div>
+</div>
+
+<div class="filters-bar" role="group" aria-label="Filter products">
+  <div class="category-tabs" role="group" aria-label="Category">
+    <button class="tab active" data-category="all">All</button>
+    <button class="tab" data-category="home">Home</button>
+    <button class="tab" data-category="personal-care">Personal care</button>
+    <button class="tab" data-category="pantry">Pantry</button>
+  </div>
+  <div class="filter-divider" aria-hidden="true"></div>
+  <div class="cert-filters" role="group" aria-label="Certifications">
+    <button class="cert-chip" data-cert="ewg" aria-pressed="false">EWG Verified</button>
+    <button class="cert-chip" data-cert="usda" aria-pressed="false">USDA Organic</button>
+    <button class="cert-chip" data-cert="b-corp" aria-pressed="false">B Corp</button>
+    <button class="cert-chip" data-cert="made-safe" aria-pressed="false">Made Safe</button>
+    <button class="cert-chip" data-cert="fragrance-free" aria-pressed="false">Fragrance-free</button>
+  </div>
+</div>
+
+<div class="results-header">
+  <span class="results-count" id="count" aria-live="polite">9 products</span>
+  <div class="sort-wrap">
+    <label for="sort">Sort by</label>
+    <select class="sort-select" id="sort">
+      <option value="score">Clean score</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
+</div>
+
+<div class="product-grid" id="grid">
+
+  <article class="product-card" data-category="home" data-certs="ewg made-safe fragrance-free" data-score="9.2">
+    <div class="card-img" aria-hidden="true">
+      <svg width="56" height="72" viewBox="0 0 56 72" fill="none">
+        <rect x="20" y="4" width="16" height="8" rx="3" stroke="currentColor" stroke-width="2"/>
+        <rect x="12" y="12" width="32" height="52" rx="8" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 28h32" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <path d="M36 10h8c3 0 5 2 5 5v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="49" cy="22" r="3" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M20 42c0-4 16-4 16 0s-16 4-16 0z" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Branch Basics Concentrate</div>
+        <div class="card-sub">Branch Basics · All-purpose cleaner</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 9.2"><span class="score-num">9.2</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Sodium gluconate</span>
+          <span class="pill pill-good">Decyl glucoside</span>
+          <span class="pill pill-good">Lauryl glucoside</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">EWG Verified</span><span class="cert-tag">Made Safe</span><span class="cert-tag">Fragrance-free</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="branch-basics">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="home" data-certs="ewg fragrance-free" data-score="8.4">
+    <div class="card-img" aria-hidden="true">
+      <svg width="52" height="72" viewBox="0 0 52 72" fill="none">
+        <ellipse cx="26" cy="8" rx="8" ry="4" stroke="currentColor" stroke-width="2"/>
+        <path d="M18 8v48c0 5 16 5 16 0V8" stroke="currentColor" stroke-width="2"/>
+        <ellipse cx="26" cy="56" rx="8" ry="4" stroke="currentColor" stroke-width="2"/>
+        <path d="M14 32c0 6 24 6 24 0" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="26" cy="20" r="5" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="26" cy="20" r="2" fill="currentColor" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Free & Clear Dish Soap</div>
+        <div class="card-sub">Seventh Generation · Dish</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 8.4"><span class="score-num">8.4</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Cocamidopropyl betaine</span>
+          <span class="pill pill-good">Sodium citrate</span>
+          <span class="pill pill-warn">Sodium lauryl sulfate</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">EWG Verified</span><span class="cert-tag">Fragrance-free</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="seventh-gen-dish">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="home" data-certs="usda b-corp fragrance-free" data-score="7.8">
+    <div class="card-img" aria-hidden="true">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="22" stroke="currentColor" stroke-width="2"/>
+        <path d="M14 32c0-10 8-18 18-18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M18 44c3 4 8 7 14 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 10v44M10 32h44" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 4"/>
+        <path d="M22 22c3 3 7 5 10 10 3-5 7-7 10-10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Plant-Powered Laundry Detergent</div>
+        <div class="card-sub">ECOS · Laundry</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 7.8"><span class="score-num">7.8</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Sodium citrate</span>
+          <span class="pill pill-good">Sodium gluconate</span>
+          <span class="pill pill-neutral">Protease</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">USDA Organic</span><span class="cert-tag">B Corp</span><span class="cert-tag">Fragrance-free</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="ecos-laundry">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="personal-care" data-certs="ewg b-corp" data-score="8.9">
+    <div class="card-img" aria-hidden="true">
+      <svg width="40" height="72" viewBox="0 0 40 72" fill="none">
+        <path d="M14 16c0-2 2-4 6-4s6 2 6 4v4H14v-4z" stroke="currentColor" stroke-width="2"/>
+        <rect x="8" y="20" width="24" height="44" rx="6" stroke="currentColor" stroke-width="2"/>
+        <path d="M14 36c0 4 12 4 12 0" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M17 50h6M17 56h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M20 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="20" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Lipid Defense Cleansing Oil</div>
+        <div class="card-sub">Beautycounter · Face cleanser</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 8.9"><span class="score-num">8.9</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Jojoba esters</span>
+          <span class="pill pill-good">Coconut alkanes</span>
+          <span class="pill pill-good">Tocopherol</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">EWG Verified</span><span class="cert-tag">B Corp</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="beautycounter-cleanser">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="personal-care" data-certs="fragrance-free" data-score="7.4">
+    <div class="card-img" aria-hidden="true">
+      <svg width="36" height="72" viewBox="0 0 36 72" fill="none">
+        <rect x="8" y="12" width="20" height="52" rx="5" stroke="currentColor" stroke-width="2"/>
+        <rect x="12" y="6" width="12" height="8" rx="3" stroke="currentColor" stroke-width="2"/>
+        <path d="M10 28h16M10 36h16" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <path d="M14 50c0 3 8 3 8 0" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M18 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Sensitive Deodorant</div>
+        <div class="card-sub">Native · Deodorant</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 7.4"><span class="score-num">7.4</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Coconut oil</span>
+          <span class="pill pill-good">Shea butter</span>
+          <span class="pill pill-warn">Baking soda</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">Fragrance-free</span><span class="cert-tag">Cruelty-free</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="native-deodorant">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="personal-care" data-certs="ewg b-corp" data-score="8.3">
+    <div class="card-img" aria-hidden="true">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <path d="M32 8c0 0-14 12-14 24a14 14 0 0028 0C46 20 32 8 32 8z" stroke="currentColor" stroke-width="2"/>
+        <path d="M32 24c0 0-6 5-6 10a6 6 0 0012 0c0-5-6-10-6-10z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M22 20c-2 3-4 7-4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <path d="M42 20c2 3 4 7 4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Fantastic Face Wash</div>
+        <div class="card-sub">Ursa Major · Face cleanser</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 8.3"><span class="score-num">8.3</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Glycerin</span>
+          <span class="pill pill-good">Aloe vera</span>
+          <span class="pill pill-good">Niacinamide</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">EWG Verified</span><span class="cert-tag">B Corp</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="ursa-major-wash">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="pantry" data-certs="usda" data-score="9.5">
+    <div class="card-img" aria-hidden="true">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="34" r="18" stroke="currentColor" stroke-width="2"/>
+        <path d="M32 16c0 0 2-8 10-10-2 6-4 10-10 10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M22 22c-4 2-6 6-6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <path d="M28 26c-2 1-4 4-4 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        <ellipse cx="32" cy="34" rx="8" ry="6" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Organic Diced Tomatoes</div>
+        <div class="card-sub">Eden Foods · Canned goods</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 9.5"><span class="score-num">9.5</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Organic tomatoes</span>
+          <span class="pill pill-good">Organic tomato juice</span>
+          <span class="pill pill-neutral">Citric acid</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">USDA Organic</span><span class="cert-tag">Non-GMO</span><span class="cert-tag">BPA-free can</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="eden-tomatoes">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="pantry" data-certs="usda b-corp" data-score="9.0">
+    <div class="card-img" aria-hidden="true">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <ellipse cx="32" cy="44" rx="20" ry="8" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 44V32c0-4 8-8 20-8s20 4 20 8v12" stroke="currentColor" stroke-width="2"/>
+        <path d="M20 24c0-4 4-12 12-16 8 4 12 12 12 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M26 20c0-2 2-6 6-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <path d="M20 36c4-2 8-2 12-2s8 0 12 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Organic Rolled Oats</div>
+        <div class="card-sub">Bob's Red Mill · Grains</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 9.0"><span class="score-num">9.0</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Organic whole grain oats</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">USDA Organic</span><span class="cert-tag">Non-GMO</span><span class="cert-tag">B Corp</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="bobs-oats">Add to list</button></div>
+    </div>
+  </article>
+
+  <article class="product-card" data-category="pantry" data-certs="" data-score="8.2">
+    <div class="card-img" aria-hidden="true">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <path d="M32 10L52 46H12L32 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M22 32L32 14l10 18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" opacity="0.4"/>
+        <path d="M18 40h28M14 46h36" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+        <path d="M28 36c0-2 8-2 8 0" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="card-top">
+      <div>
+        <div class="card-name">Grain-Free Tortilla Chips</div>
+        <div class="card-sub">Siete Foods · Snacks</div>
+      </div>
+      <div class="score-badge score-high" aria-label="Clean score 8.2"><span class="score-num">8.2</span><span class="score-label">Clean</span></div>
+    </div>
+    <div class="card-body">
+      <div>
+        <div class="ingredient-label">Key ingredients</div>
+        <div class="pills">
+          <span class="pill pill-good">Cassava flour</span>
+          <span class="pill pill-good">Avocado oil</span>
+          <span class="pill pill-neutral">Sea salt</span>
+        </div>
+      </div>
+      <div class="certs-row">
+        <span class="cert-tag">Non-GMO</span><span class="cert-tag">Grain-free</span><span class="cert-tag">Gluten-free</span>
+      </div>
+      <div class="card-actions"><button class="btn-add" data-id="siete-chips">Add to list</button></div>
+    </div>
+  </article>
+
+  <div class="empty-state" id="empty-state" aria-live="polite">
+    <p>No products match these filters</p>
+    <span>Try removing a filter to see more results.</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function () {
+  const grid = document.getElementById('grid');
+  const cards = Array.from(grid.querySelectorAll('.product-card'));
+  const emptyState = document.getElementById('empty-state');
+  const countEl = document.getElementById('count');
+  const listBadge = document.getElementById('list-badge');
+  const toggleBtn = document.getElementById('theme-toggle');
+  const iconMoon = document.getElementById('icon-moon');
+  const iconSun = document.getElementById('icon-sun');
+  const html = document.documentElement;
+
+  let activeCategory = 'all';
+  let activeCerts = new Set();
+  let searchQuery = '';
+
+  // ── Theme ─────────────────────────────────────────────────────────────────────
+  function isDark() {
+    const t = html.getAttribute('data-theme');
+    if (t === 'dark') return true;
+    if (t === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function syncIcons() {
+    const dark = isDark();
+    iconMoon.style.display = dark ? 'none' : 'block';
+    iconSun.style.display  = dark ? 'block' : 'none';
+    toggleBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+  try { const s = localStorage.getItem('clean-shopper-theme'); if (s) html.setAttribute('data-theme', s); } catch (e) {}
+  syncIcons();
+  toggleBtn.addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    try { localStorage.setItem('clean-shopper-theme', next); } catch (e) {}
+    syncIcons();
+  });
+
+  // ── Saved list ────────────────────────────────────────────────────────────────
+  let savedIds = new Set();
+  try { const s = localStorage.getItem('clean-shopper-list'); if (s) savedIds = new Set(JSON.parse(s)); } catch (e) {}
+  function persistList() { try { localStorage.setItem('clean-shopper-list', JSON.stringify([...savedIds])); } catch (e) {} }
+  function updateBadge() {
+    const n = savedIds.size;
+    listBadge.textContent = n;
+    listBadge.classList.toggle('visible', n > 0);
+  }
+  cards.forEach(card => {
+    const btn = card.querySelector('.btn-add');
+    if (savedIds.has(btn.dataset.id)) { btn.textContent = '✓ Saved to list'; btn.classList.add('saved'); }
+  });
+  updateBadge();
+
+  // ── Filtering — searches actual visible text, not a data attribute ─────────────
+  function matches(card) {
+    const catMatch = activeCategory === 'all' || card.dataset.category === activeCategory;
+    const certs = card.dataset.certs ? card.dataset.certs.split(' ').filter(Boolean) : [];
+    const certMatch = activeCerts.size === 0 || [...activeCerts].every(c => certs.includes(c));
+    const q = searchQuery.trim().toLowerCase();
+    const displayText = (
+      (card.querySelector('.card-name')?.textContent || '') + ' ' +
+      (card.querySelector('.card-sub')?.textContent || '')
+    ).toLowerCase();
+    const nameMatch = !q || displayText.includes(q);
+    return catMatch && certMatch && nameMatch;
+  }
+
+  function sortCards(visible) {
+    const by = document.getElementById('sort').value;
+    return visible.slice().sort((a, b) =>
+      by === 'score'
+        ? parseFloat(b.dataset.score) - parseFloat(a.dataset.score)
+        : (a.querySelector('.card-name')?.textContent || '').localeCompare(b.querySelector('.card-name')?.textContent || '')
+    );
+  }
+
+  function updateDisplay() {
+    const visible = cards.filter(matches);
+    sortCards(visible).forEach(c => grid.appendChild(c));
+    grid.appendChild(emptyState);
+    cards.forEach(c => { c.style.display = visible.includes(c) ? '' : 'none'; });
+    const n = visible.length;
+    countEl.textContent = n === 1 ? '1 product' : `${n} products`;
+    emptyState.style.display = n === 0 ? 'block' : 'none';
+  }
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeCategory = tab.dataset.category;
+      updateDisplay();
+    });
+  });
+
+  document.querySelectorAll('.cert-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const cert = chip.dataset.cert;
+      const on = activeCerts.has(cert);
+      if (on) { activeCerts.delete(cert); chip.classList.remove('active'); chip.setAttribute('aria-pressed', 'false'); }
+      else     { activeCerts.add(cert);    chip.classList.add('active');    chip.setAttribute('aria-pressed', 'true'); }
+      updateDisplay();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    updateDisplay();
+  });
+
+  document.getElementById('sort').addEventListener('change', updateDisplay);
+
+  grid.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-add');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    if (savedIds.has(id)) { savedIds.delete(id); btn.textContent = 'Add to list'; btn.classList.remove('saved'); }
+    else { savedIds.add(id); btn.textContent = '✓ Saved to list'; btn.classList.add('saved'); }
+    persistList();
+    updateBadge();
+  });
+
+  updateDisplay();
+})();
+</script>
+</body>
+</html>
