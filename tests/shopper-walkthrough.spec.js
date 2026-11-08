@@ -7,7 +7,7 @@ import { expect, test } from '@playwright/test'
 test.skip(!process.env.WALKTHROUGH, 'Set WALKTHROUGH=1 to run the shopper walkthrough')
 
 test('a shopper browses, searches, fills a cart and checks out', async ({ page }, testInfo) => {
-  const dir = `test-results/walkthrough/${testInfo.project.name}`
+  const dir = `walkthrough-screenshots/${testInfo.project.name}`
   let step = 0
   const notes = []
   const shot = async (name, note) => {
