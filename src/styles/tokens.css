@@ -1,6 +1,8 @@
 /* Design tokens: the source of truth for every visible value.
    Copied from the :root block of the reference components.html. */
 :root {
+  color-scheme: dark;
+
   --bg:           #000000;
   --surface:      #02090a;
   --surface-warm: #061a1c;
@@ -76,4 +78,71 @@
   --container-gutter-desktop: 64px;
   --container-gutter-tablet:  32px;
   --container-gutter-phone:   16px;
+}
+
+/* Light mode. Only colors, shadows and the focus ring change; type, spacing and shapes are
+   shared. The neon accent and yellow warning are too faint on white, so light uses deeper
+   greens and amber that keep WCAG AA contrast.
+   It applies when the device is set to light, unless someone picked dark with the theme
+   switch (data-theme="dark"), and always when they picked light (data-theme="light"). */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+
+    --bg:           #ffffff;
+    --surface:      #f7f7f8;
+    --surface-warm: #eaf2f0;
+
+    --fg:   #000000;
+    --fg-2: #000000;
+    --muted: #52525b;
+    --meta:  #71717a;
+
+    --border:      #e4e4e7;
+    --border-soft: #8a8a93;
+
+    --accent:        #008060;
+    --accent-on:     #ffffff;
+    --accent-hover:  #006e52;
+
+    --success: #008060;
+    --warn:    #a16207;
+    --danger:  #b91c1c;
+
+    --elev-raised:
+      rgba(0, 0, 0, 0.04) 0px 1px 2px,
+      rgba(0, 0, 0, 0.06) 0px 4px 12px;
+
+    --focus-ring: 0 0 0 2px #008060;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg:           #ffffff;
+  --surface:      #f7f7f8;
+  --surface-warm: #eaf2f0;
+
+  --fg:   #000000;
+  --fg-2: #000000;
+  --muted: #52525b;
+  --meta:  #71717a;
+
+  --border:      #e4e4e7;
+  --border-soft: #8a8a93;
+
+  --accent:        #008060;
+  --accent-on:     #ffffff;
+  --accent-hover:  #006e52;
+
+  --success: #008060;
+  --warn:    #a16207;
+  --danger:  #b91c1c;
+
+  --elev-raised:
+    rgba(0, 0, 0, 0.04) 0px 1px 2px,
+    rgba(0, 0, 0, 0.06) 0px 4px 12px;
+
+  --focus-ring: 0 0 0 2px #008060;
 }
