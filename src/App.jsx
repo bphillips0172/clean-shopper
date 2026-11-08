@@ -42,7 +42,7 @@ function App() {
   const clearCompare = () => setCompareList([])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <SiteHeader savedCount={cart.length} />
       <Routes>
