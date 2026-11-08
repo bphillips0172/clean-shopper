@@ -91,7 +91,7 @@ The base panel that other components build on.
 
 ## CategoryTag
 
-> **Proposed 2026-11-08.** Replaces the approved read-only label: CategoryTag is now a filter. The reference file has no tags, so this section builds one from the chip, button and type rules above.
+> **Approved 2026-11-08.** Replaces the earlier read-only label: CategoryTag is now a filter. The reference file has no tags, so this section builds one from the chip, button and type rules above.
 
 A pill people tap to filter products by category, such as "All", "Home", "Personal care" or "Pantry". It is a shared component (`src/components/CategoryTag.jsx`).
 
