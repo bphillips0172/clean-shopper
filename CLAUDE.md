@@ -15,8 +15,10 @@ Clean Shopper helps people find clean, non-toxic home, personal care, and pantry
 Before any UI work, read these files. They hold decisions already made — follow them unless I say otherwise:
 
 - **docs/design-notes.md** — design direction for Clean Shopper
-- **docs/design-system.md** — Polaris design system: token values, rules, Do's and Don'ts, and the "Ask me first" guidelines
+- **docs/component-spec.md** — Clean Shopper's design system: tokens, components, and the ProductCard spec. Token values live in src/styles/tokens.css.
 - **docs/design-decisions.md** — log of decisions made in the token rename and rules review
+
+docs/design-system.md describes Polaris, a different product. Keep it for reference only; don't apply its rules to Clean Shopper.
 
 ## Where things go
 
